@@ -7,22 +7,53 @@ import PerformanceGraph from "./Modules/PerformanceGraph";
 import ServiceManagement from "./Modules/ServiceManagement";
 import History from "./Modules/History";
 
+const API_URL = "http://localhost:3000";
+
 export default function App() {
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
   const [currentView, setCurrentView] = useState("dashboard");
 
   const handleLogin = async (username, password) => {
-    if (username === "admin" && password === "1234") {
-      setUser({ name: "Admin" });
-      setCurrentView("dashboard");
-    } else {
-      throw new Error("Incorrect username or password.");
+    const response = await fetch(`${API_URL}/api/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        password,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Login failed.");
     }
+
+    setUser(data.user);
+    setToken(data.token);
+    setCurrentView("dashboard");
   };
 
-  const handleLogout = () => {
-    setUser(null);
-    setCurrentView("dashboard");
+  const handleLogout = async () => {
+    try {
+      if (token) {
+        await fetch(`${API_URL}/api/logout`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      setToken(null);
+      setUser(null);
+      setCurrentView("dashboard");
+    }
   };
 
   const handleNavigate = (view) => {
