@@ -16,9 +16,11 @@ app.use(express.json());
 
 // Import routes
 const authRoutes = require('./src/routes/auth');
+const servicesRoutes = require('./src/routes/services');
 
 // use routes
 app.use('/api', authRoutes);
+app.use('/api', servicesRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

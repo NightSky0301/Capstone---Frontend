@@ -98,7 +98,7 @@ export default function App() {
 
   if (currentView === "service") {
     return (
-      <ServiceManagement onLogout={handleLogout} onNavigate={handleNavigate} />
+      <ServiceManagement onLogout={handleLogout} onNavigate={handleNavigate} token={token} />
     );
   }
 

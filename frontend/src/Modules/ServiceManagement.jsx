@@ -1,39 +1,96 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-import { services as initialServices } from "./mockData";
 import "../Css/Dashboard.css";
 import "../Css/ServiceManagement.css";
 
-export default function ServiceManagement({ onLogout, onNavigate }) {
+const API_URL = "http://localhost:3000/api";
+
+// Sends a request to the backend with the JWT attached.
+// Returns the JSON answer, or throws an Error with a readable message.
+async function api(token, path, options = {}) {
+  let response;
+  try {
+    response = await fetch(`${API_URL}${path}`, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch {
+    throw new Error("Cannot reach the server. Please try again.");
+  }
+
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.message || "Something went wrong. Please try again.");
+  }
+  return data;
+}
+
+export default function ServiceManagement({ onLogout, onNavigate, token }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [serviceList, setServiceList] = useState(initialServices);
+  const [serviceList, setServiceList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+  const [reloadKey, setReloadKey] = useState(0);
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
 
-  const nextId = () =>
-    serviceList.length === 0
-      ? 1
-      : Math.max(...serviceList.map((s) => s.id)) + 1;
+  // Loads the services from MySQL (through the API) when the page opens,
+  // and again every time reloadKey changes (after add / edit / remove).
+  useEffect(() => {
+    let ignore = false;
+    api(token, "/services")
+      .then((data) => {
+        if (ignore) return;
+        setServiceList(data);
+        setLoadError("");
+      })
+      .catch((err) => {
+        if (!ignore) setLoadError(err.message);
+      })
+      .finally(() => {
+        if (!ignore) setLoading(false);
+      });
+    return () => {
+      ignore = true;
+    };
+  }, [token, reloadKey]);
 
-  const handleAddService = (name, price) => {
-    setServiceList((prev) => [...prev, { id: nextId(), name, price }]);
+  const reloadServices = () => setReloadKey((k) => k + 1);
+
+  // The modals catch the errors thrown here and show them to the user.
+  const handleAddService = async (name, price, adminPassword) => {
+    await api(token, "/services", {
+      method: "POST",
+      body: JSON.stringify({ name, price, adminPassword }),
+    });
     setAddModalOpen(false);
+    reloadServices();
   };
 
-  const handleChangePrice = (newPrice) => {
-    setServiceList((prev) =>
-      prev.map((s) => (s.id === editingId ? { ...s, price: newPrice } : s)),
-    );
+  const handleChangePrice = async (newPrice) => {
+    await api(token, `/services/${editingId}`, {
+      method: "PUT",
+      body: JSON.stringify({ price: newPrice }),
+    });
     setEditingId(null);
+    reloadServices();
   };
 
-  const handleRemove = (id) => {
+  const handleRemove = async (id) => {
     const target = serviceList.find((s) => s.id === id);
     if (!target) return;
     if (window.confirm(`Remove "${target.name}" from services?`)) {
-      setServiceList((prev) => prev.filter((s) => s.id !== id));
+      try {
+        await api(token, `/services/${id}`, { method: "DELETE" });
+        reloadServices();
+      } catch (err) {
+        window.alert(err.message);
+      }
     }
   };
 
@@ -70,6 +127,12 @@ export default function ServiceManagement({ onLogout, onNavigate }) {
           </button>
         </div>
 
+        {loadError && (
+          <p role="alert" style={{ color: "#b00020", margin: "0 0 12px" }}>
+            {loadError}
+          </p>
+        )}
+
         <div className="services-mgmt-card">
           <table className="services-mgmt-table">
             <thead>
@@ -100,7 +163,14 @@ export default function ServiceManagement({ onLogout, onNavigate }) {
                   </td>
                 </tr>
               ))}
-              {serviceList.length === 0 && (
+              {loading && (
+                <tr>
+                  <td colSpan={3} className="no-services-cell">
+                    Loading services…
+                  </td>
+                </tr>
+              )}
+              {!loading && !loadError && serviceList.length === 0 && (
                 <tr>
                   <td colSpan={3} className="no-services-cell">
                     No services yet — click "Add Services" to create one.
@@ -132,12 +202,15 @@ function AddServiceModal({ isOpen, onClose, onConfirm }) {
   const [name, setName] = useState("");
   const [adminPassword, setAdminPassword] = useState("");
   const [basePrice, setBasePrice] = useState("");
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   if (!isOpen) return null;
 
   const priceNumber = Number(basePrice);
   const isValid =
     name.trim() !== "" &&
+    adminPassword !== "" &&
     basePrice.trim() !== "" &&
     !Number.isNaN(priceNumber) &&
     priceNumber > 0;
@@ -146,15 +219,25 @@ function AddServiceModal({ isOpen, onClose, onConfirm }) {
     setName("");
     setAdminPassword("");
     setBasePrice("");
+    setError("");
     onClose();
   };
 
-  const handleDone = () => {
-    if (!isValid) return;
-    onConfirm(name.trim(), priceNumber);
-    setName("");
-    setAdminPassword("");
-    setBasePrice("");
+  const handleDone = async () => {
+    if (!isValid || submitting) return;
+    setSubmitting(true);
+    setError("");
+    try {
+      await onConfirm(name.trim(), priceNumber, adminPassword);
+      setName("");
+      setAdminPassword("");
+      setBasePrice("");
+    } catch (err) {
+      setError(err.message);
+      setAdminPassword("");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return createPortal(
@@ -182,6 +265,12 @@ function AddServiceModal({ isOpen, onClose, onConfirm }) {
           min="0"
         />
 
+        {error && (
+          <p role="alert" style={{ color: "#b00020", margin: "0" }}>
+            {error}
+          </p>
+        )}
+
         <div className="add-service-actions">
           <button className="back-service-button" onClick={handleClose}>
             Back
@@ -189,7 +278,7 @@ function AddServiceModal({ isOpen, onClose, onConfirm }) {
           <button
             className="done-button"
             onClick={handleDone}
-            disabled={!isValid}
+            disabled={!isValid || submitting}
           >
             Done
           </button>
@@ -202,6 +291,8 @@ function AddServiceModal({ isOpen, onClose, onConfirm }) {
 
 function ChangePriceModal({ isOpen, currentPrice, onClose, onConfirm }) {
   const [value, setValue] = useState("");
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   if (!isOpen) return null;
 
@@ -211,13 +302,22 @@ function ChangePriceModal({ isOpen, currentPrice, onClose, onConfirm }) {
 
   const handleBack = () => {
     setValue("");
+    setError("");
     onClose();
   };
 
-  const handleConfirm = () => {
-    if (!isValid) return;
-    onConfirm(priceNumber);
-    setValue("");
+  const handleConfirm = async () => {
+    if (!isValid || submitting) return;
+    setSubmitting(true);
+    setError("");
+    try {
+      await onConfirm(priceNumber);
+      setValue("");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return createPortal(
@@ -236,6 +336,12 @@ function ChangePriceModal({ isOpen, currentPrice, onClose, onConfirm }) {
           min="0"
         />
 
+        {error && (
+          <p role="alert" style={{ color: "#b00020", margin: "0" }}>
+            {error}
+          </p>
+        )}
+
         <div className="change-price-actions">
           <button className="back-btn" onClick={handleBack}>
             Back
@@ -243,7 +349,7 @@ function ChangePriceModal({ isOpen, currentPrice, onClose, onConfirm }) {
           <button
             className="confirm-btn"
             onClick={handleConfirm}
-            disabled={!isValid}
+            disabled={!isValid || submitting}
           >
             Confirm
           </button>
