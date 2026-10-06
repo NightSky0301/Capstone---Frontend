@@ -1,0 +1,861 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Work+Sans:wght@400;500;600;700&display=swap");
+
+:root {
+  --bb-ink: #2b2b2b;
+  --bb-muted: #7a7a7a;
+  --bb-brown: #3e3a36;
+  --bb-brown-deep: #2f2c29;
+  --bb-tan: #e3b788;
+  --bb-tan-deep: #dba26a;
+  --bb-gold: #c9a227;
+  --bb-green: #5fb85c;
+  --bb-green-deep: #4fa34c;
+  --bb-shadow:
+    0 1px 2px rgba(62, 58, 54, 0.06), 0 8px 24px rgba(62, 58, 54, 0.08);
+  --bb-shadow-hover:
+    0 2px 4px rgba(62, 58, 54, 0.08), 0 14px 30px rgba(62, 58, 54, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: "Work Sans", sans-serif;
+  color: var(--bb-ink);
+}
+
+/* ---- Page shell ---- */
+.dashboard-root {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: linear-gradient(145deg, #efeeeb 0%, #e4e2de 100%);
+}
+
+/* soft glow in the corner, same idea as the login screen */
+.dashboard-root::before {
+  content: "";
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  top: -160px;
+  right: -120px;
+  border-radius: 50%;
+  background: rgba(227, 183, 136, 0.35);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---- Header ---- */
+.header {
+  position: relative;
+  z-index: 20;
+  flex-shrink: 0;
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 28px;
+  color: #fff;
+  background: linear-gradient(135deg, #3e3a36 0%, #2f2c29 100%);
+  border-bottom: 3px solid rgba(227, 183, 136, 0.6);
+  box-shadow: 0 6px 20px rgba(47, 44, 41, 0.25);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.hamburger {
+  width: 42px;
+  height: 42px;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 0;
+  transition: background 0.15s ease;
+}
+
+.hamburger:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.hamburger span {
+  width: 22px;
+  height: 2.5px;
+  background: #fff;
+  border-radius: 2px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.logo svg {
+  width: 38px;
+  height: 38px;
+  padding: 8px;
+  border-radius: 50%;
+  background: rgba(227, 183, 136, 0.18);
+  box-shadow: 0 0 0 2px rgba(227, 183, 136, 0.45);
+  color: #f3e6d6;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.role-badge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 7px 16px;
+  border-radius: 999px;
+}
+
+.role-badge-admin {
+  background: linear-gradient(135deg, #ebc69b 0%, #c9a227 100%);
+  color: #2b2418;
+  box-shadow: 0 4px 10px rgba(201, 162, 39, 0.35);
+}
+
+.role-badge-cashier {
+  background: linear-gradient(135deg, #8fb8ec 0%, #3f7fd1 100%);
+  color: #11284a;
+  box-shadow: 0 4px 10px rgba(63, 127, 209, 0.35);
+}
+
+.logout-button {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.logout-button:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* ---- Sidebar ---- */
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 25;
+}
+
+.sidebar-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar {
+  position: fixed;
+  top: 84px;
+  left: 16px;
+  width: 224px;
+  background: #fff;
+  border: 1px solid rgba(62, 58, 54, 0.06);
+  border-radius: 16px;
+  padding: 10px;
+  transform: translateY(-10px) scale(0.98);
+  transform-origin: top left;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 0.18s ease,
+    opacity 0.18s ease;
+  z-index: 30;
+  box-shadow:
+    0 16px 40px rgba(47, 44, 41, 0.22),
+    0 2px 6px rgba(47, 44, 41, 0.08);
+}
+
+.sidebar.open {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar-divider {
+  display: none;
+}
+
+.sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebar li a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  color: var(--bb-brown);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition:
+    background 0.12s ease,
+    color 0.12s ease;
+}
+
+.sidebar li a svg {
+  color: #b98550;
+}
+
+.sidebar li a:hover {
+  background: #f6efe6;
+  color: #1a1a1a;
+}
+
+/* ---- Main content ---- */
+.dashboard-main {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 16px 28px 18px;
+  overflow-y: auto;
+}
+
+.dashboard-top {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+/* Wraps the back button + title together. A real gap (rather than
+   margins, which can collapse unpredictably) keeps clear space between
+   the back button and the title plaque's corner brackets below it. */
+.dashboard-top > div:not(.status-legend) {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+/* Back-to-dashboard: a small bordered pill matching the gold/cream
+   plaque styling used elsewhere, instead of bare underlined text. */
+.back-to-dashboard {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  border: 1px solid rgba(62, 58, 54, 0.12);
+  border-radius: 999px;
+  padding: 7px 16px 7px 12px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--bb-brown);
+  box-shadow: var(--bb-shadow);
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.back-to-dashboard:hover {
+  background: #faf3e8;
+  border-color: rgba(201, 162, 39, 0.45);
+  color: #8a6a1f;
+  transform: translateX(-2px);
+}
+
+/* Dashboard title: a soft framed "plaque" — thin gold border, warm
+   gradient fill, and bracket-style corner flourishes top-left/bottom-right
+   for a vintage barbershop-signage feel instead of a flat accent line. */
+.dashboard-title {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin: 0;
+  padding: 10px 24px;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--bb-ink);
+  background: linear-gradient(135deg, #fffdf9 0%, #faf2e4 100%);
+  border: 1.5px solid rgba(201, 162, 39, 0.5);
+  border-radius: 16px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.7),
+    var(--bb-shadow);
+}
+
+.dashboard-title::before,
+.dashboard-title::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--bb-gold);
+  pointer-events: none;
+}
+
+.dashboard-title::before {
+  top: -7px;
+  left: -7px;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 5px 0 0 0;
+}
+
+.dashboard-title::after {
+  bottom: -7px;
+  right: -7px;
+  border-left: none;
+  border-top: none;
+  border-radius: 0 0 5px 0;
+}
+
+/* Pulled out of normal flow so it renders as its own separate pill
+   sitting just outside the title plaque's right edge, rather than
+   inside the bordered box with "DASHBOARD". */
+.dashboard-date {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  margin-left: 14px;
+  display: inline-block;
+  white-space: nowrap;
+  background: #fff;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: normal;
+  color: var(--bb-muted);
+  box-shadow: var(--bb-shadow);
+}
+
+.dashboard-date:empty {
+  display: none;
+}
+
+.status-legend {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+  background: #fff;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #5a5a57;
+  box-shadow: var(--bb-shadow);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-dot.busy {
+  background: #8a8a87;
+}
+
+.status-dot.available {
+  background: var(--bb-green);
+}
+
+/* ---- Stat cards ---- */
+.stat-row {
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  background: #fff;
+  border: 1px solid rgba(62, 58, 54, 0.05);
+  border-radius: 18px;
+  padding: 13px 18px;
+  box-shadow: var(--bb-shadow);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--bb-shadow-hover);
+}
+
+.stat-icon {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f6e7d3 0%, #efd3ad 100%);
+  color: #9a6a35;
+}
+
+.peso-glyph {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stat-text {
+  min-width: 0;
+}
+
+.stat-label {
+  margin: 0 0 4px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--bb-muted);
+}
+
+.stat-label-accent {
+  color: var(--bb-gold);
+  font-weight: 600;
+}
+
+.stat-value {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.15;
+  color: #1a1a1a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- Barber queue ---- */
+.queue-section {
+  flex: 1;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+}
+
+.queue-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+/* Barber Queue label: same framed-plaque treatment as the dashboard
+   title, scaled down — gold border, warm fill, corner brackets. */
+.queue-label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 0;
+  padding: 8px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--bb-ink);
+  background: linear-gradient(135deg, #fffdf9 0%, #faf2e4 100%);
+  border: 1.5px solid rgba(201, 162, 39, 0.45);
+  border-radius: 12px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.7),
+    var(--bb-shadow);
+}
+
+.queue-label::before,
+.queue-label::after {
+  content: "";
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  border: 2px solid var(--bb-gold);
+  pointer-events: none;
+}
+
+.queue-label::before {
+  top: -5px;
+  left: -5px;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 4px 0 0 0;
+}
+
+.queue-label::after {
+  bottom: -5px;
+  right: -5px;
+  border-left: none;
+  border-top: none;
+  border-radius: 0 0 4px 0;
+}
+
+.queue-summary {
+  display: flex;
+  gap: 8px;
+}
+
+.summary-pill {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: #fff;
+  color: #5a5a57;
+  box-shadow: var(--bb-shadow);
+}
+
+.summary-pill.available {
+  background: #e9f6e6;
+  color: #2e7d32;
+}
+
+/* Decorative frame around the whole queue card: a slightly thicker,
+   warm-toned border plus a thin gradient bar along the top edge so the
+   table reads as its own distinct panel instead of a flat white box. */
+.queue-table-scroll {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  background: #fff;
+  border: 1.5px solid rgba(219, 162, 106, 0.35);
+  border-radius: 20px;
+  box-shadow:
+    var(--bb-shadow),
+    0 0 0 4px rgba(227, 183, 136, 0.08);
+  scrollbar-width: thin;
+  scrollbar-color: #d6d1c9 transparent;
+}
+
+.queue-table-scroll::before {
+  content: "";
+  position: sticky;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--bb-tan-deep),
+    var(--bb-gold),
+    var(--bb-tan-deep)
+  );
+  z-index: 2;
+}
+
+.queue-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.queue-table thead th {
+  position: sticky;
+  top: 4px;
+  z-index: 1;
+  background: #faf8f5;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8a8a87;
+  padding: 14px 24px;
+  box-shadow: inset 0 -1px 0 #eee9e1;
+}
+
+.queue-table tbody td {
+  padding: 14px 24px;
+  border-top: 1px solid #f0ece5;
+  font-size: 15px;
+  color: #222;
+  vertical-align: middle;
+}
+
+.queue-table tbody tr:first-child td {
+  border-top: none;
+}
+
+.queue-table tbody tr:hover td {
+  background: #fbf9f6;
+}
+
+.queue-table tbody tr.row-available td {
+  background: #f3faf1;
+}
+
+.queue-table tbody tr.row-available:hover td {
+  background: #ecf7e8;
+}
+
+.queue-table tbody tr.row-available td:first-child {
+  box-shadow: inset 3px 0 0 var(--bb-green);
+}
+
+/* Barber queue only: center the status + heads columns */
+.barber-queue-table thead th:nth-child(2),
+.barber-queue-table thead th:nth-child(3),
+.barber-queue-table tbody td:nth-child(2),
+.barber-queue-table tbody td:nth-child(3) {
+  text-align: center;
+}
+
+.barber-cell {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-weight: 600;
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ebc69b 0%, #dba26a 100%);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar.busy {
+  background: linear-gradient(135deg, #bdb9b2 0%, #9c978f 100%);
+}
+
+.heads-badge {
+  display: inline-block;
+  min-width: 40px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: #f4efe8;
+  color: var(--bb-brown);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.status-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 140px;
+  padding: 9px 22px;
+  border: none;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    background 0.12s ease;
+}
+
+.status-button::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.status-button.busy {
+  background: #77736d;
+}
+
+.status-button.busy:hover {
+  background: #67635e;
+}
+
+.status-button.available {
+  background: linear-gradient(135deg, #6cc569 0%, #4fa34c 100%);
+  box-shadow: 0 6px 14px rgba(79, 163, 76, 0.35);
+}
+
+.status-button.available:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 9px 18px rgba(79, 163, 76, 0.4);
+}
+
+/* ---- Empty state ---- */
+.queue-empty {
+  height: 100%;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.queue-empty-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f6e7d3 0%, #efd3ad 100%);
+  color: #9a6a35;
+  margin-bottom: 8px;
+}
+
+.queue-empty-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--bb-brown);
+}
+
+.queue-empty-sub {
+  margin: 0;
+  font-size: 13px;
+  color: #8a8a87;
+}
+
+/* ---- Small screens ---- */
+@media (max-width: 720px) {
+  .header {
+    padding: 10px 16px;
+  }
+
+  .logo {
+    font-size: 15px;
+  }
+
+  .dashboard-main {
+    padding: 18px 16px 22px;
+  }
+
+  .dashboard-title {
+    font-size: 22px;
+  }
+
+  .queue-table thead th,
+  .queue-table tbody td {
+    padding: 12px 14px;
+  }
+
+  .status-button {
+    min-width: 116px;
+    padding: 8px 14px;
+  }
+}
+
+/* Gold accent line on the top edge of every table card.
+   Change --bb-table-accent to restyle all of them at once. */
+:root {
+  --bb-table-accent: #d9a23a;
+}
+
+.dashboard-root .report-card,
+.dashboard-root .hist-card,
+.dashboard-root .svc-card,
+.dashboard-root .perf-chart-card {
+  border-top: 4px solid var(--bb-table-accent);
+}
+
+/* ---- Services Management: make the card fill the page ---- */
+.dashboard-root .svc-card {
+  flex: 1;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.dashboard-root .svc-table-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.dashboard-root .svc-card .queue-empty {
+  flex: 1;
+  height: auto;
+}

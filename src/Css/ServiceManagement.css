@@ -1,0 +1,252 @@
+.add-services-button {
+  background: #6b6b6b;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.add-services-button:hover {
+  background: #5c5c5c;
+}
+
+.services-mgmt-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 10px 30px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.services-mgmt-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.services-mgmt-table thead th {
+  text-align: left;
+  font-size: 13px;
+  font-weight: 500;
+  color: #555;
+  padding: 14px 10px 10px;
+}
+
+.services-mgmt-table thead th:nth-child(2),
+.services-mgmt-table thead th:nth-child(3) {
+  text-align: center;
+}
+
+.services-mgmt-table tbody td {
+  padding: 14px 10px;
+  border-top: 1px solid #eee;
+}
+
+.service-name-cell {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.service-price-cell {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.service-action-cell {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.edit-service-button {
+  background: #5fb85c;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 26px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.edit-service-button:hover {
+  background: #4fa34c;
+}
+
+.remove-service-link {
+  background: none;
+  border: none;
+  font-size: 12px;
+  color: #a83232;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+.remove-service-link:hover {
+  color: #7a2323;
+}
+
+.no-services-cell {
+  text-align: center;
+  color: #888;
+  padding: 24px;
+}
+
+.services-mgmt-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 140px;
+  z-index: 40;
+}
+
+.add-service-modal,
+.change-price-modal {
+  background: #fff;
+  border-radius: 16px;
+  border: 1.5px solid #333;
+  padding: 24px 28px;
+  width: 320px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.add-service-modal h2,
+.change-price-modal h2 {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 18px;
+  color: #1a1a1a;
+}
+
+.add-service-modal input,
+.change-price-modal input {
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  background: #e5e5e3;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 13px;
+  margin-bottom: 12px;
+  outline: none;
+}
+
+.add-service-modal input:focus,
+.change-price-modal input:focus {
+  outline: 1.5px solid #333;
+}
+
+.add-service-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.back-service-button {
+  flex: 1;
+  background: #1a1a1a;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.back-service-button:hover {
+  background: #333;
+}
+
+.done-button {
+  flex: 1;
+  background: #5fb85c;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.done-button:hover:not(:disabled) {
+  background: #4fa34c;
+}
+
+.done-button:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+.current-price-note {
+  text-align: center;
+  font-size: 12px;
+  color: #777;
+  margin: -8px 0 14px;
+}
+
+.change-price-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.change-price-actions button {
+  flex: 1;
+  background: #1a1a1a;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.change-price-actions button:hover:not(:disabled) {
+  background: #333;
+}
+
+.change-price-actions .confirm-btn:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+
+/* ---- Make the Services card fill the page ---- */
+.dashboard-root .svc-card {
+  flex: 1;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* With rows: table fills the card and scrolls inside it */
+.dashboard-root .svc-table-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* Empty state: centered in the taller card */
+.dashboard-root .svc-card .queue-empty {
+  flex: 1;
+  height: auto;
+}

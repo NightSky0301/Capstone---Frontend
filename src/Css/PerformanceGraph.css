@@ -1,0 +1,222 @@
+/* ---- Layout ---- */
+.perf-layout {
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 290px;
+  gap: 20px;
+  align-items: stretch; /* both columns end on the same bottom line */
+  margin-bottom: 18px;
+}
+
+.perf-card {
+  min-width: 0;
+  background: #fff;
+  border: 1px solid rgba(62, 58, 54, 0.05);
+  border-radius: 20px;
+  box-shadow: var(--bb-shadow);
+}
+
+/* ---- Main chart card ---- */
+.perf-chart-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.perf-card-head {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  border-bottom: 1px solid #f0ece5;
+}
+
+.perf-axis-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8a8a87;
+}
+
+.perf-chart-title {
+  margin: 0;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--bb-ink);
+}
+
+.perf-nav-link {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  background: #f4efe8;
+  border: none;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b5a48;
+  cursor: pointer;
+  transition:
+    background 0.12s ease,
+    color 0.12s ease;
+}
+
+.perf-nav-link:hover {
+  background: #ead9c3;
+  color: #1a1a1a;
+}
+
+.perf-chart-body {
+  flex: 1; /* fills the card if the right column is ever taller */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px 20px 14px 4px;
+  min-height: 340px;
+}
+
+/* ---- Side column ---- */
+.perf-side {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.perf-info-card {
+  flex-shrink: 0; /* keeps its natural height */
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+}
+
+.perf-info-text {
+  min-width: 0;
+}
+
+.perf-info-label {
+  margin: 0 0 4px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--bb-muted);
+}
+
+.perf-info-value {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.15;
+  color: #1a1a1a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.perf-info-sub {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #8a8a87;
+}
+
+/* Grows to fill the leftover height so its bottom edge lines up
+   with the bottom of the main chart card */
+.perf-daily-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 20px 14px;
+}
+
+.perf-daily-title {
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--bb-ink);
+}
+
+/* Chart area stretches to whatever space is left in the card */
+.perf-daily-chart {
+  position: relative;
+  flex: 1;
+  min-height: 190px;
+}
+
+.perf-daily-chart-inner {
+  position: absolute;
+  inset: 0;
+}
+
+/* Center the empty state inside the stretched card */
+.perf-daily-card .queue-empty {
+  flex: 1;
+  height: auto;
+}
+
+/* ---- Legend ---- */
+.perf-legend {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.perf-legend-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  padding: 6px 13px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #5a5a57;
+  box-shadow: var(--bb-shadow);
+}
+
+.perf-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* ---- Empty states (reuse the queue-empty look from Dashboard.css) ---- */
+.queue-empty.perf-empty {
+  min-height: 300px;
+}
+
+.queue-empty.perf-empty.small {
+  min-height: 170px;
+  padding: 16px 8px;
+}
+
+.queue-empty.perf-empty.small .queue-empty-icon {
+  width: 46px;
+  height: 46px;
+}
+
+/* ---- Small screens ---- */
+@media (max-width: 960px) {
+  .perf-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .perf-card-head {
+    grid-template-columns: 1fr auto;
+  }
+
+  .perf-chart-title {
+    grid-column: 1 / -1;
+    order: 3;
+    text-align: left;
+  }
+}

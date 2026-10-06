@@ -1,0 +1,372 @@
+/* ---- Add button (header + empty state) ---- */
+.svc-add-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 24px;
+  background: linear-gradient(135deg, #ebc69b 0%, #dba26a 100%);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(219, 162, 106, 0.4);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.svc-add-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 22px rgba(219, 162, 106, 0.5);
+}
+
+/* ---- Card: fills the rest of the page ---- */
+.dashboard-root .svc-card {
+  flex: 1;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: var(--bb-shadow);
+  overflow: hidden;
+}
+
+.dashboard-root .svc-card .queue-empty {
+  flex: 1;
+  height: auto;
+}
+
+.queue-empty .svc-add-button {
+  margin-top: 14px;
+}
+
+/* ---- Table ---- */
+.svc-table-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.svc-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.svc-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #faf8f5;
+  padding: 14px 24px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8a8a87;
+  box-shadow: inset 0 -1px 0 #eee9e1;
+}
+
+.svc-table tbody td {
+  padding: 14px 24px;
+  border-top: 1px solid #f0ece5;
+  vertical-align: middle;
+}
+
+.svc-table tbody tr:first-child td {
+  border-top: none;
+}
+
+.svc-table tbody tr:hover td {
+  background: #fbf9f6;
+}
+
+.svc-table .svc-center {
+  text-align: center;
+}
+
+.svc-table .svc-right {
+  text-align: right;
+}
+
+.svc-name {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--bb-ink);
+}
+
+.svc-icon {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f6e7d3 0%, #efd3ad 100%);
+  color: #9a6a35;
+}
+
+.svc-price {
+  display: inline-block;
+  min-width: 80px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: #fdf3e3;
+  color: #8a5a1f;
+  font-size: 14px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.svc-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.svc-edit,
+.svc-remove {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.12s ease,
+    color 0.12s ease;
+}
+
+.svc-edit {
+  background: #e9f6e6;
+  color: #2e7d32;
+}
+
+.svc-edit:hover {
+  background: #d9efd4;
+}
+
+.svc-remove {
+  background: #fbeaea;
+  color: #a83232;
+}
+
+.svc-remove:hover {
+  background: #f6d5d5;
+}
+
+/* ---- Modals ---- */
+.svc-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(47, 44, 41, 0.45);
+  backdrop-filter: blur(2px);
+}
+
+.svc-modal {
+  width: 100%;
+  max-width: 400px;
+  background: #fff;
+  border-radius: 22px;
+  padding: 28px 28px 24px;
+  box-shadow:
+    0 24px 60px rgba(47, 44, 41, 0.3),
+    0 2px 8px rgba(47, 44, 41, 0.1);
+  font-family: "Work Sans", sans-serif;
+}
+
+.svc-modal h2 {
+  margin: 0 0 4px;
+  font-family: inherit;
+  font-size: 22px;
+  font-weight: 700;
+  color: #2b2b2b;
+}
+
+.svc-modal-sub {
+  margin: 0 0 18px;
+  font-size: 13px;
+  color: #8a8a87;
+}
+
+.svc-modal-center {
+  text-align: center;
+}
+
+.svc-danger-icon {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #fbeaea;
+  color: #a83232;
+}
+
+.svc-current {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #faf8f5;
+  font-size: 13px;
+  color: #8a8a87;
+}
+
+.svc-current strong {
+  font-size: 15px;
+  color: var(--bb-ink);
+}
+
+/* ---- Form fields ---- */
+.svc-field {
+  display: block;
+  margin-bottom: 14px;
+}
+
+.svc-field > span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b5a48;
+}
+
+.svc-field input {
+  width: 100%;
+  padding: 11px 14px;
+  background: #faf8f5;
+  border: 1.5px solid transparent;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--bb-ink);
+  outline: none;
+  transition:
+    border-color 0.12s ease,
+    background 0.12s ease;
+}
+
+.svc-field input:focus {
+  background: #fff;
+  border-color: var(--bb-tan);
+}
+
+.svc-input-wrap,
+.svc-input-prefix {
+  position: relative;
+}
+
+.svc-input-wrap input {
+  padding-right: 44px;
+}
+
+.svc-eye {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  color: #8a7b6c;
+  cursor: pointer;
+}
+
+.svc-eye:hover {
+  background: #f4efe8;
+  color: #1a1a1a;
+}
+
+.svc-prefix {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+  font-weight: 600;
+  color: #8a7b6c;
+  pointer-events: none;
+}
+
+.svc-input-prefix input {
+  padding-left: 32px;
+}
+
+/* ---- Modal buttons ---- */
+.svc-modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.svc-btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.svc-btn.secondary {
+  background: #f0ece5;
+  color: var(--bb-brown);
+}
+
+.svc-btn.secondary:hover {
+  background: #e6e0d6;
+}
+
+.svc-btn.primary {
+  background: linear-gradient(135deg, #6cc569 0%, #4fa34c 100%);
+  color: #fff;
+}
+
+.svc-btn.primary:hover:not(:disabled) {
+  background: #4fa34c;
+}
+
+.svc-btn.primary:disabled {
+  background: #cfcac2;
+  cursor: not-allowed;
+}
+
+.svc-btn.danger {
+  background: #c94545;
+  color: #fff;
+}
+
+.svc-btn.danger:hover {
+  background: #a83232;
+}

@@ -1,0 +1,323 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Work+Sans:wght@400;500;600&display=swap");
+
+/* ---- Page: everything centered on the screen ---- */
+.login-screen {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+  font-family: "Work Sans", sans-serif;
+  background: linear-gradient(145deg, #efeeeb 0%, #e4e2de 100%);
+}
+
+/* soft decorative glows behind the card */
+.login-screen::before,
+.login-screen::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  pointer-events: none;
+}
+
+.login-screen::before {
+  width: 380px;
+  height: 380px;
+  top: -120px;
+  left: -100px;
+  background: rgba(227, 183, 136, 0.45);
+}
+
+.login-screen::after {
+  width: 420px;
+  height: 420px;
+  bottom: -160px;
+  right: -120px;
+  background: rgba(62, 58, 54, 0.22);
+}
+
+/* ---- Card ---- */
+.login-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 380px;
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 24px;
+  padding: 40px 36px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow:
+    0 24px 60px rgba(62, 58, 54, 0.18),
+    0 2px 8px rgba(62, 58, 54, 0.08);
+}
+
+/* ---- Logo ---- */
+.login-logo {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: #3e3a36;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  box-shadow: 0 0 0 6px rgba(227, 183, 136, 0.35);
+}
+
+.login-logo.has-image {
+  width: auto;
+  height: auto;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.login-logo img {
+  display: block;
+  height: 88px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* ---- Brand name ---- */
+.login-brand-name {
+  margin: 0;
+  text-align: center;
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+.login-brand-small {
+  display: block;
+  font-family: "Playfair Display", serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5em;
+  text-indent: 0.5em; /* balances the trailing letter-spacing so it looks centered */
+  text-transform: uppercase;
+  color: #8a7b6c;
+  margin-bottom: 6px;
+}
+
+.login-brand-main {
+  display: block;
+  font-family: "Playfair Display", serif;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #2b2b2b;
+}
+
+.login-divider {
+  width: 44px;
+  height: 3px;
+  border-radius: 999px;
+  background: #e3b788;
+  margin: 16px 0 12px;
+}
+
+.login-subtitle {
+  margin: 0 0 24px;
+  font-size: 13px;
+  color: #7a7a7a;
+}
+
+/* ---- Form ---- */
+.login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-field {
+  position: relative;
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.input-field input {
+  width: 100%;
+  box-sizing: border-box;
+  background: #f4f3f0;
+  border: 1.5px solid transparent;
+  border-radius: 14px;
+  padding: 13px 44px 13px 44px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #2b2b2b;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.input-field input::placeholder {
+  color: #9a9a97;
+}
+
+.input-field input:focus {
+  outline: none;
+  background: #fff;
+  border-color: #e3b788;
+  box-shadow: 0 0 0 4px rgba(227, 183, 136, 0.25);
+}
+
+.input-field input:disabled {
+  opacity: 0.6;
+}
+
+.input-icon {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  display: flex;
+  color: #9a8f84;
+  pointer-events: none;
+}
+
+.input-field input:focus ~ .input-icon,
+.input-field:focus-within .input-icon {
+  color: #b98550;
+}
+
+/* Show/hide password eye */
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 4px;
+  color: #8a8a87;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+}
+
+.password-toggle:hover,
+.password-toggle:focus-visible {
+  color: #1a1a1a;
+}
+
+.password-toggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error-message {
+  background: #fbeaea;
+  color: #a83232;
+  font-size: 12px;
+  text-align: center;
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin: 0 0 12px;
+}
+
+.forgot-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 18px;
+}
+
+.forgot-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 12px;
+  font-family: inherit;
+  color: #8a7b6c;
+  cursor: pointer;
+}
+
+.forgot-link:hover,
+.forgot-link:focus-visible {
+  color: #1a1a1a;
+  text-decoration: underline;
+}
+
+.login-button {
+  width: 100%;
+  background: linear-gradient(135deg, #ebc69b 0%, #dba26a 100%);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: 13px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: "Work Sans", sans-serif;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(219, 162, 106, 0.4);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    filter 0.15s ease;
+}
+
+.login-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(0.97);
+  box-shadow: 0 12px 22px rgba(219, 162, 106, 0.45);
+}
+
+.login-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.login-button:focus-visible {
+  outline: 2px solid #1a1a1a;
+  outline-offset: 2px;
+}
+
+.login-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-footer {
+  margin: 22px 0 0;
+  font-size: 11px;
+  color: #a5a5a2;
+  letter-spacing: 0.04em;
+}
+
+/* Screen-reader-only labels — inputs are visually labeled by their
+   placeholder, but real <label> elements are still required for
+   accessibility (placeholders disappear once you start typing). */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- Small screens ---- */
+@media (max-width: 420px) {
+  .login-card {
+    padding: 32px 24px 24px;
+    border-radius: 20px;
+  }
+
+  .login-brand-main {
+    font-size: 28px;
+  }
+}
