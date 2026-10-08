@@ -34,7 +34,7 @@ CREATE TABLE `barbers` (
   `is_active_today` tinyint(1) DEFAULT '0',
   `queue_order` int NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `barbers`
@@ -58,7 +58,7 @@ CREATE TABLE `roles` (
   `role_id` int NOT NULL,
   `role_name` varchar(50) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `roles`
@@ -79,7 +79,7 @@ CREATE TABLE `services` (
   `service_name` varchar(100) NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `services`
@@ -107,7 +107,7 @@ CREATE TABLE `transactions` (
   `payment_method` enum('cash','gcash','paymaya','qrph') NOT NULL,
   `payment_status` enum('pending','partial','paid') NOT NULL DEFAULT 'pending',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `transactions`
@@ -132,7 +132,7 @@ CREATE TABLE `transaction_items` (
   `service_id` int NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `quantity` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `transaction_items`
@@ -163,7 +163,7 @@ CREATE TABLE `users` (
   `last_login` datetime DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
@@ -188,7 +188,7 @@ CREATE TABLE `user_logs` (
   `user_agent` text,
   `status` enum('success','failed') NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user_logs`
