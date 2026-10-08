@@ -106,5 +106,5 @@ export default function App() {
     return <History onLogout={handleLogout} onNavigate={handleNavigate} />;
   }
 
-  return <Dashboard onLogout={handleLogout} onNavigate={handleNavigate} />;
+    return <Dashboard onLogout={handleLogout} onNavigate={handleNavigate} token={token} />;
 }

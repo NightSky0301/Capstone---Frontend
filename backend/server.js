@@ -17,10 +17,14 @@ app.use(express.json());
 // Import routes
 const authRoutes = require('./src/routes/auth');
 const servicesRoutes = require('./src/routes/services');
+const barbersRoutes = require('./src/routes/barbers');
+const transactionsRoutes = require('./src/routes/transactions');
 
 // use routes
 app.use('/api', authRoutes);
 app.use('/api', servicesRoutes);
+app.use('/api', barbersRoutes);
+app.use('/api', transactionsRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
